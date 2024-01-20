@@ -2,7 +2,6 @@ import { getSelf } from '@/lib/authService';
 import db from '@/lib/db';
 
 export const getRecommended = async () => {
-  // await new Promise((resolve, reject) => setTimeout(resolve, 5000));
   let userId;
 
   try {
@@ -17,18 +16,38 @@ export const getRecommended = async () => {
   if (userId) {
     users = await db.user.findMany({
       where: {
-        NOT: { id: userId },
+        AND: [
+          {
+            NOT: {
+              id: userId,
+            },
+          },
+          {
+            NOT: {
+              followedBy: {
+                none: {
+                  followerId: userId,
+                },
+              },
+            },
+          },
+        ],
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
     });
-  } else
+  } else {
     users = await db.user.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
     });
+  }
 
   return users;
 };
