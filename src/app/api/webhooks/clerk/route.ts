@@ -5,23 +5,33 @@ import { headers } from 'next/headers';
 import { Webhook } from 'svix';
 
 export async function POST(req: Request) {
-  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET_KEY || '';
+  const WEBHOOK_SECRET =
+    process.env.CLERK_WEBHOOK_SECRET_KEY || '';
 
   if (!WEBHOOK_SECRET) {
-    throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local');
+    throw new Error(
+      'Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local'
+    );
   }
   const headerPayload = headers();
   const payload = await req.json();
 
   const svix_id = headerPayload.get('svix-id');
-  const svix_timestamp = headerPayload.get('svix-timestamp');
-  const svix_signature = headerPayload.get('svix-signature');
+  const svix_timestamp = headerPayload.get(
+    'svix-timestamp'
+  );
+  const svix_signature = headerPayload.get(
+    'svix-signature'
+  );
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('Error occured -- no svix headers', {
-      status: 400,
-    });
+    return new Response(
+      'Error occured -- no svix headers',
+      {
+        status: 400,
+      }
+    );
   }
 
   const wh = new Webhook(WEBHOOK_SECRET);
@@ -40,7 +50,11 @@ export async function POST(req: Request) {
       status: 400,
     });
   }
-  type EventType = 'user.created' | 'user.updated' | 'user.deleted' | '*';
+  type EventType =
+    | 'user.created'
+    | 'user.updated'
+    | 'user.deleted'
+    | '*';
 
   // @ts-ignore
   const eventType: EventType = evt.type;
@@ -51,6 +65,11 @@ export async function POST(req: Request) {
         externalUserId: payload.data.id,
         username: payload.data.username,
         imageUrl: payload.data.image_url,
+        stream: {
+          create: {
+            name: `${payload.data.username}'s stream`,
+          },
+        },
       },
     });
   }

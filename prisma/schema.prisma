@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -20,6 +21,29 @@ model User {
   followedBy Follow[] @relation("FollowedBy")
   blocking   Block[]  @relation("Blocking")
   blockedBy  Block[]  @relation("BlockedBy")
+  stream     Stream?
+}
+
+model Stream {
+  id                  String  @id @default(uuid()) @map("_id")
+  name                String  @db.String
+  thumbnailUrl        String? @db.String
+  ingressId           String?
+  serverUrl           String? @db.String
+  streamKey           String? @db.String
+  isLive              Boolean @default(false)
+  isChatEnabled       Boolean @default(true)
+  isChatDelayed       Boolean @default(false)
+  isChatFollowersOnly Boolean @default(false)
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ingressId])
+  @@fulltext([name])
 }
 
 model Follow {
