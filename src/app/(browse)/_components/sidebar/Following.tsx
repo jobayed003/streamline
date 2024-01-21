@@ -6,7 +6,11 @@ import { UserItemSkeleton } from './Recommended';
 import { UserItem } from './UserItem';
 
 type FollowingProps = {
-  data: (Follow & { following: User })[];
+  data: (Follow & {
+    following: User & {
+      stream: { isLive: boolean } | null;
+    };
+  })[];
 };
 
 export const Following = ({ data }: FollowingProps) => {
@@ -20,7 +24,9 @@ export const Following = ({ data }: FollowingProps) => {
     <div>
       {!collapsed && (
         <div className='pl-6 mb-4'>
-          <p className='text-sm text-muted-foreground'>Following</p>
+          <p className='text-sm text-muted-foreground'>
+            Following
+          </p>
         </div>
       )}
 
@@ -30,6 +36,7 @@ export const Following = ({ data }: FollowingProps) => {
             key={follow.following.id}
             username={follow.following.username}
             imageUrl={follow.following.imageUrl}
+            isLive={follow.following.stream?.isLive}
           />
         ))}
       </ul>
