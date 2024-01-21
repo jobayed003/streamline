@@ -10,7 +10,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Stream Line',
-  description: 'Streaming platform for gamers and creators.',
+  description:
+    'Streaming platform for gamers and creators.',
 };
 
 export default function RootLayout({ children }: Children) {
@@ -18,8 +19,15 @@ export default function RootLayout({ children }: Children) {
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <html lang='en'>
         <body className={inter.className}>
-          <ThemeProvider attribute='class' defaultTheme='dark' storageKey='streamline-theme'>
-            <Toaster theme='light' position='bottom-center' />
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='dark'
+            storageKey='streamline-theme'
+          >
+            <Toaster
+              theme='light'
+              position='bottom-center'
+            />
             {children}
           </ThemeProvider>
         </body>

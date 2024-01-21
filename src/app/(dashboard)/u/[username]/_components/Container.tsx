@@ -1,15 +1,15 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import { useSidebar } from '@/store/useSidebar';
 import { useEffect } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 
+import { cn } from '@/lib/utils';
+import { useCreatorSidebar } from '@/store/useCreatorSidebar';
+
 export const Container = ({ children }: Children) => {
-  const matches = useMediaQuery('(max-width: 1024px)');
-  const { collapsed, onCollapse, onExpand } = useSidebar(
-    (state) => state
-  );
+  const { collapsed, onCollapse, onExpand } =
+    useCreatorSidebar((state) => state);
+  const matches = useMediaQuery(`(max-width: 1024px)`);
 
   useEffect(() => {
     if (matches) {
@@ -17,7 +17,7 @@ export const Container = ({ children }: Children) => {
     } else {
       onExpand();
     }
-  }, [matches]);
+  }, [matches, onCollapse, onExpand]);
 
   return (
     <div
