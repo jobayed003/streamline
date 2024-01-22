@@ -6,29 +6,12 @@ import { cn } from '@/lib/utils';
 
 import { useViewerToken } from '@/hooks/useViewerToken';
 import { useChatSidebar } from '@/store/useChatSidebar';
+import { AboutCard } from './AboutCard';
 import { Chat, ChatSkeleton } from './Chat';
 import { ChatToggle } from './ChatToggle';
 import { Header, HeaderSkeleton } from './Header';
+import { InfoCard } from './InfoCard';
 import { Video, VideoSkeleton } from './Video';
-
-type CustomStream = {
-  id: string;
-  isChatEnabled: boolean;
-  isChatDelayed: boolean;
-  isChatFollowersOnly: boolean;
-  isLive: boolean;
-  thumbnailUrl: string | null;
-  name: string;
-};
-
-type CustomUser = {
-  id: string;
-  username: string;
-  bio: string | null;
-  stream: CustomStream | null;
-  imageUrl: string;
-  _count: { followedBy: number };
-};
 
 type StreamPlayerProps = {
   user: CustomUser;
@@ -36,11 +19,7 @@ type StreamPlayerProps = {
   isFollowing: boolean;
 };
 
-export const StreamPlayer = ({
-  user,
-  stream,
-  isFollowing,
-}: StreamPlayerProps) => {
+export const StreamPlayer = ({ user, stream, isFollowing }: StreamPlayerProps) => {
   const { token, name, identity } = useViewerToken(user.id);
   const { collapsed } = useChatSidebar((state) => state);
 
@@ -73,7 +52,6 @@ export const StreamPlayer = ({
             isFollowing={isFollowing}
             name={stream.name}
           />
-          {/*
           <InfoCard
             hostIdentity={user.id}
             viewerIdentity={identity}
@@ -86,7 +64,7 @@ export const StreamPlayer = ({
             viewerIdentity={identity}
             bio={user.bio}
             followedByCount={user._count.followedBy}
-          /> */}
+          />
         </div>
         <div className={cn('col-span-1', collapsed && 'hidden')}>
           <Chat

@@ -17,11 +17,7 @@ type ActionsProps = {
   isHost: boolean;
 };
 
-export const Actions = ({
-  hostIdentity,
-  isFollowing,
-  isHost,
-}: ActionsProps) => {
+export const Actions = ({ hostIdentity, isFollowing, isHost }: ActionsProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { userId } = useAuth();
@@ -30,19 +26,11 @@ export const Actions = ({
     startTransition(() => {
       if (isFollowing) {
         onUnfollow(hostIdentity)
-          .then((data) =>
-            toast.success(
-              `You have unfollowed ${data.following.username}`
-            )
-          )
+          .then((data) => toast.success(`You have unfollowed ${data.following.username}`))
           .catch(() => toast.error('Something went wrong'));
       } else {
         onFollow(hostIdentity)
-          .then((data) =>
-            toast.success(
-              `You are now following ${data.following.username}`
-            )
-          )
+          .then((data) => toast.success(`You are now following ${data.following.username}`))
           .catch(() => toast.error('Something went wrong'));
       }
     });
@@ -50,7 +38,7 @@ export const Actions = ({
 
   const toggleFollow = () => {
     if (!userId) {
-      return router.push('/sign-in');
+      return router.push('/login');
     }
 
     if (isHost) return;
@@ -66,12 +54,7 @@ export const Actions = ({
       size='sm'
       className='w-full lg:w-auto'
     >
-      <Heart
-        className={cn(
-          'h-4 w-4 mr-2',
-          isFollowing ? 'fill-white' : 'fill-none'
-        )}
-      />
+      <Heart className={cn('h-4 w-4 mr-2', isFollowing ? 'fill-white' : 'fill-none')} />
       {isFollowing ? 'Unfollow' : 'Follow'}
     </Button>
   );
